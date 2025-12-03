@@ -27,10 +27,10 @@
             };
         in
           pkgs.mkShell {
-            libraries = with pkgs; [ libudev-zero ];
-            packages = with pkgs; [ rust-bin.stable.latest.default rust-analyzer cargo libudev-zero pkg-config ];
+            libraries = with pkgs; [ libpthread-stubs ];
+            packages = with pkgs; [ rust-bin.stable.latest.default rust-analyzer cargo libudev-zero pkg-config clang libclang libpthread-stubs libc  lld ];
             shellHook = ''
-            export PKG_CONFIG_PATH=${pkgs.lib.concatStrings ["${pkgs.libudev-zero}" "/lib/pkgconfig"]}
+            export PKG_CONFIG_PATH=${pkgs.lib.concatStrings ["${pkgs.libpthread-stubs}" "/lib/pkgconfig"]}
             '';
           };
     };
