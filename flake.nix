@@ -12,12 +12,18 @@
         let pkgs = import nixpkgs { inherit system; };
         in pkgs.rustPlatform.buildRustPackage {
           pname = "kunai";
-          nativeBuildInputs = [ pkgs.pkg-config ];
-          buildInputs = [ pkgs.libudev-zero ];
+          nativeBuildInputs = [
+            pkgs.pkg-config
+            pkgs.rustPlatform.bindgenHook
+          ];
+          buildInputs = [
+            pkgs.bpf-linker
+            pkgs.libbpf
+            pkgs.libudev-zero
+          ];
           version = "0.1.0";
           cargoLock.lockFile = ./Cargo.lock;
           src = pkgs.lib.cleanSource ./.;
-
         };
       devShells.${system}.default =
         let pkgs = import nixpkgs {
