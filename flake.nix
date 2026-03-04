@@ -34,7 +34,21 @@
         in
           pkgs.mkShell {
             libraries = with pkgs; [ libpthread-stubs ];
-            packages = with pkgs; [ rust-bin.stable.latest.default rust-analyzer cargo libudev-zero pkg-config clang libclang libpthread-stubs libc  lld ];
+            packages = with pkgs; [
+              rustPlatform.bindgenHook
+              bpf-linker
+              cargo
+              clang
+              libc
+              libclang
+              libpthread-stubs
+              libudev-zero
+              lld
+              pkg-config
+              (rust-bin.nightly.latest.default.override {
+                extensions = [ "rust-analyzer" "rust-src" "clippy" ];
+              })
+            ];
             shellHook = ''
             export PKG_CONFIG_PATH=${pkgs.lib.concatStrings ["${pkgs.libpthread-stubs}" "/lib/pkgconfig"]}
             '';
