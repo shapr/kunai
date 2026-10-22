@@ -2,10 +2,12 @@
   description = "kunai is a command line bloom filter calculator that outputs colors to an RGB matrix";
   inputs = {
     # The nixpkgs channels we want to consume
-    nixpkgs-25_11.url = "github:NixOS/nixpkgs/nixos-25.11";
+    # nixpkgs-26_05.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Some links to the above channels for consistent naming in outputs
-    nixpkgs.follows = "nixpkgs-25_11";
+    # nixpkgs.follows = "nixpkgs-26_05";
+    nixpkgs.follows = "nixpkgs-unstable";
 
     # Extra inputs for software living outside nixpkgs
     flake-compat = {
@@ -33,7 +35,14 @@
             pkgs.libudev-zero
           ];
           version = "0.1.0";
-          cargoLock.lockFile = ./Cargo.lock;
+          cargoLock = {
+            lockFile = ./Cargo.lock;
+            outputHashes = {
+              "aya-build-0.2.0" = "sha256-m85cu0x9dkMwcqM5/O4YxqrmtGTAt1LrMDZNk+QL5RI=";
+              # "aya-build-0.2.0" = "sha256-YJtBTKpQjwTS27yUga1oafQ6uasdyavSN/yifAgY9mM=";
+            };
+          };
+
           src = pkgs.lib.cleanSource ./.;
         };
       devShells.${system}.default =
