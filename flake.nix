@@ -20,9 +20,11 @@
   outputs = { nixpkgs, rust-overlay, ... }:
     let
       system = "x86_64-linux";
+      overlays = [ (import rust-overlay) ];
     in {
       packages.${system}.default =
-        let pkgs = import nixpkgs { inherit system; };
+        let
+          pkgs = import nixpkgs { inherit system overlays; };
         in pkgs.rustPlatform.buildRustPackage {
           pname = "kunai";
           nativeBuildInputs = [
@@ -30,6 +32,8 @@
             pkgs.rustPlatform.bindgenHook
           ];
           buildInputs = [
+            # Use the nightly channel in order to build bpf target - not yet in stable
+            ( pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default) )
             pkgs.bpf-linker
             pkgs.libbpf
             pkgs.libudev-zero
